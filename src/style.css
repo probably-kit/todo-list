@@ -19,6 +19,25 @@ input[type="text"] {
 }
 
 
+/* .slide {
+    --color: #8fc866;
+    --hover: #66c887;
+}
+
+.slide:hover, .slide:focus {
+    box-shadow: inset 6.5em 0 0 0 var(--hover);
+}
+
+
+button {
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.1);
+} */
 
 
 button {
@@ -35,7 +54,7 @@ button {
 button:hover,button:focus {
     background-color: #000;
     background-position:  0 100%; /* Slide the gradient to the left */
-    color: #fff; /* New text color on hover */
+    color: #000; /* New text color on hover */
 }
 
 button:hover,
