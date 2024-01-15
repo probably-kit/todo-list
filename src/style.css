@@ -18,15 +18,32 @@ input[type="text"] {
     margin-right: 10px;
 }
 
+
+
+
 button {
     padding: 10px;
+    font-size: 16px;
     cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+    background: linear-gradient(to right, white 50%, transparent 50%);
+    background-size: 200% 100%;
+    color: #000;
+    border: none;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-button:hover {
-    transform: scale(1.1);
+button:hover,button:focus {
+    background-color: #000;
+    background-position:  0 100%; /* Slide the gradient to the left */
+    color: #fff; /* New text color on hover */
 }
+
+button:hover,
+button:active {
+    background-position: -100% 0; /* Slide the gradient to the right when leaving the button */
+    color: #fff; /* New text color on exit */
+}
+
 
 ul {
     list-style: none;
