@@ -1,2 +1,2 @@
 # todo-list
-https://probably-kit.github.io/todo-list/
+live prewiew: https://probably-kit.github.io/todo-list/
