@@ -10,103 +10,99 @@ console.log("webpack is working");
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    function addTask() {
-        // Get form values
+  class TodoApp {
+    constructor() {
+        this.taskList = document.getElementById('taskList');
+        this.addTaskButton = document.getElementById('addTaskButton');
+        this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    }
+
+    init() {
+        this.addTaskButton.addEventListener('click', () => this.showPopup());
+        this.taskList.addEventListener('click', event => {
+            if (event.target.type === 'checkbox') {
+                this.removeTask(event.target);
+            }
+        });
+        this.renderTasks();
+    }
+
+    showPopup() {
+        const popup = document.getElementById("popup");
+        popup.innerHTML = `
+            <form id="taskForm" onsubmit="event.preventDefault(); app.addTask();">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required>
+                
+                <label for="description">Description:</label>
+                <textarea id="description" required></textarea>
+                
+                <label for="deadline">Deadline:</label>
+                <input type="date" id="deadline" required>
+                
+                <label for="priority">Priority:</label>
+                <select id="priority" required>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                
+                <button type="submit">Add Task</button>
+            </form>
+        `;
+        popup.style.display = 'block';
+    }
+
+    addTask() {
         let title = document.getElementById('title').value;
         let description = document.getElementById('description').value;
         let deadline = document.getElementById('deadline').value;
         let priority = document.getElementById('priority').value;
 
-        // Create a JavaScript object
-        let task = {
-            title: title,
-            description: description,
-            deadline: deadline,
-            priority: priority
-        };
+        let task = { title, description, deadline, priority };
 
-        let taskList = document.getElementById('taskList');
+        this.tasks.push(task);
+        this.updateLocalStorage();
+        this.renderTask(task);
+        this.closePopup();
+    }
+
+    renderTasks() {
+        this.taskList.innerHTML = '';
+        this.tasks.forEach(task => this.renderTask(task));
+    }
+
+    renderTask(task) {
         let listItem = document.createElement('li');
         listItem.className = 'task';
         listItem.innerHTML = `
-      <input type="checkbox" onclick="removeTask(this)"> 
-      <strong>${task.title}</strong><br>
-      Description: ${task.description}<br>
-      Deadline: ${task.deadline}<br>
-      Priority: ${task.priority}
-    `;
+            <input type="checkbox"> 
+            <strong>${task.title}</strong><br>
+            Description: ${task.description}<br>
+            Deadline: ${task.deadline}<br>
+            Priority: ${task.priority}
+        `;
+        this.taskList.appendChild(listItem);
+    }
 
-        taskList.appendChild(listItem);
+    removeTask(checkbox) {
+        let index = Array.from(this.taskList.children).indexOf(checkbox.parentElement);
+        this.tasks.splice(index, 1);
+        this.updateLocalStorage();
+        checkbox.parentElement.remove();
+    }
 
-        // Reset form and hide the popup
+    updateLocalStorage() {
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    }
+
+    closePopup() {
         document.getElementById('taskForm').reset();
         document.getElementById('popup').style.display = 'none';
     }
+}
 
-    function showPopup() {
-        const popup = document.getElementById("popup");
-
-        popup.innerHTML = `<form id="taskForm" onsubmit="addTask(); return false;">
-        <label for="title">Title:</label>
-        <input type="text" id="title" required>
-        
-        <label for="description">Description:</label>
-        <textarea id="description" required></textarea>
-        
-        <label for="deadline">Deadline:</label>
-        <input type="date" id="deadline" required>
-        
-        <label for="priority">Priority:</label>
-        <select id="priority" required>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-        
-        <button type="submit">Add Task</button>
-      </form>`;
-
-        popup.style.display = 'block';
-    }
-
-    
-
-    function removeTask(checkbox) {
-        // Get the parent li element and remove it
-        let listItem = checkbox.parentNode;
-        listItem.parentNode.removeChild(listItem);
-      }
-
-
-    // function addTask() {
-    //     const taskInput = document.getElementById('taskInput');
-    //     const taskList = document.getElementById('taskList');
-
-    //     if (taskInput.value !== '') {
-    //         const li = document.createElement('li');
-    //         const checkbox = document.createElement('input');
-    //         checkbox.type = 'checkbox';
-    //         li.appendChild(checkbox);
-
-    //         const taskText = document.createElement('span');
-    //         taskText.textContent = taskInput.value;
-    //         li.appendChild(taskText);
-
-    //         taskList.appendChild(li);
-    //         taskInput.value = '';
-
-    //         checkbox.addEventListener('change', function () {
-    //             if (checkbox.checked) {
-    //                 taskText.style.textDecoration = 'line-through';
-    //             } else {
-    //                 taskText.style.textDecoration = 'none';
-    //             }
-    //         });
-    //     }
-    
-
-    const addTaskButton = document.getElementById('addTaskButton');
-addTaskButton.addEventListener('click', showPopup);
+const app = new TodoApp
 
 });
 
