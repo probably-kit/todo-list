@@ -21,6 +21,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // You can add methods here if needed
       }
 
+      document.getElementById('closeFormBtn').addEventListener('click', function() {
+        document.getElementById('formPopup').style.display = 'none';
+    });
+
+    // Event listener for the Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            document.getElementById('formPopup').style.display = 'none';
+        }
+    });
 
     document.getElementById('openFormBtn').addEventListener('click', function() {
         document.getElementById('formPopup').style.display = 'block';
