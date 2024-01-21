@@ -95,3 +95,8 @@ body {
     margin-top: 8px;
   }
   
+  form textarea#description {
+    height: 5em; /* Initial fixed height */
+    resize: none; /* Allow only vertical resizing */
+    overflow-y: hidden; /* Hide the vertical scrollbar */
+  }
