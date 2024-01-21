@@ -38,24 +38,51 @@ document.addEventListener('DOMContentLoaded', function () {
       
       document.getElementById('taskForm').addEventListener('submit', function(event) {
         event.preventDefault();
-      
+    
         // Create a new Todo object
         const newTodo = new Todo(
-          document.getElementById('title').value,
-          document.getElementById('description').value,
-          document.getElementById('dueDate').value,
-          document.getElementById('priority').value
+            document.getElementById('title').value,
+            document.getElementById('description').value,
+            document.getElementById('dueDate').value,
+            document.getElementById('priority').value
         );
-      
+    
         // Create a list item using the Todo object
         const listItem = document.createElement('li');
-        listItem.innerHTML = `<strong>${newTodo.title}</strong> (${newTodo.priority}) - ${newTodo.description} <em>${newTodo.dueDate}</em>`;
-      
+        const checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
+        checkBox.id = 'check' + document.getElementById('taskList').childElementCount;
+    
+        const label = document.createElement('label');
+        label.htmlFor = checkBox.id;
+        label.textContent = newTodo.title;
+    
+        const infoButton = document.createElement('button');
+        infoButton.textContent = 'Info';
+    
+        const infoDiv = document.createElement('div');
+        infoDiv.style.display = 'none';
+        infoDiv.innerHTML = `
+            <p>Description: ${newTodo.description}</p>
+            <p>Due Date: ${newTodo.dueDate}</p>
+            <p>Priority: ${newTodo.priority}</p>
+        `;
+    
+        infoButton.onclick = function() {
+            infoDiv.style.display = infoDiv.style.display === 'none' ? 'block' : 'none';
+        };
+    
+        listItem.appendChild(checkBox);
+        listItem.appendChild(label);
+        listItem.appendChild(infoButton);
+        listItem.appendChild(infoDiv);
+    
         document.getElementById('taskList').appendChild(listItem);
-      
+    
         this.reset();
         document.getElementById('formPopup').style.display = 'none';
-      });
+    });
+    
       
       
 });
