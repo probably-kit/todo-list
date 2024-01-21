@@ -4,11 +4,11 @@ body {
     color: black;
     margin: 0;
     padding: 20px;
-  }
-  
-  button,
-  #openFormBtn,
-  form button {
+}
+
+button,
+#openFormBtn,
+form button {
     cursor: pointer;
     font-size: 16px;
     padding: 10px;
@@ -16,30 +16,45 @@ body {
     border: 1px solid #000;
     background: linear-gradient(to right, white 50%, black 50%);
     background-size: 200% 100%;
-    color: black; /* Text color set to black */
-  }
-  
-  button:hover, 
-  button:focus,
-  button:active,
-  #openFormBtn:hover, 
-  #openFormBtn:focus, 
-  #openFormBtn:active,
-  form button:hover, 
-  form button:focus, 
-  form button:active {
+    color: black;
+}
+
+button:hover, 
+button:focus,
+button:active,
+#openFormBtn:hover, 
+#openFormBtn:focus, 
+#openFormBtn:active,
+form button:hover, 
+form button:focus, 
+form button:active {
     background-position: -100% 0;
-    color: white; /* Text color changes to white on hover/active */
-  }
-  
-  #openFormBtn {
+    color: white;
+}
+
+#openFormBtn {
     background-color: black;
     color: black;
     text-transform: uppercase;
     font-weight: bold;
-  }
-  
-  #formPopup {
+}
+
+#closeFormBtn {
+    background: linear-gradient(to right, white 50%, #ff5100 50%);
+    background-size: 200% 100%;
+    color: black; /* Initial text color */
+    
+}
+
+#closeFormBtn:hover, 
+#closeFormBtn:focus, 
+#closeFormBtn:active {
+    background-position: -100% 0;
+    color: white; 
+    /* Text color changes to white on hover/active */
+}
+
+#formPopup {
     display: none;
     position: fixed;
     left: 50%;
@@ -51,23 +66,23 @@ body {
     background-color: white;
     width: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  form h2 {
+}
+
+form h2 {
     font-size: 24px;
     margin-bottom: 20px;
-  }
-  
-  form label {
+}
+
+form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-  form input, 
-  form textarea, 
-  form select, 
-  form button {
+}
+
+form input, 
+form textarea, 
+form select, 
+form button {
     width: 100%;
     padding: 8px;
     margin-bottom: 20px;
@@ -75,28 +90,28 @@ body {
     box-sizing: border-box;
     background-color: white;
     color: black;
-  }
-  
-  form button {
+}
+
+form button {
     background-color: black;
-    color: black;
+    
     text-transform: uppercase;
     font-weight: bold;
-  }
-  
-  ul {
+}
+
+ul {
     list-style-type: none;
     padding: 0;
-  }
-  
-  li {
+}
+
+li {
     border-bottom: 1px solid black;
     padding: 8px 0;
     margin-top: 8px;
-  }
+}
   
-  form textarea#description {
-    height: 5em; /* Initial fixed height */
-    resize: none; /* Allow only vertical resizing */
-    overflow-y: hidden; /* Hide the vertical scrollbar */
-  }
+form textarea#description {
+    height: 5em;
+    resize: none;
+    overflow-y: hidden;
+}
