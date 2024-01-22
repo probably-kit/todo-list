@@ -2,89 +2,140 @@ import Todo from './todo';
 import Project from './project';
 import '../style.css';
 
-
 console.log("webpack is working");
-//POP UP MESSAGE WITH FORMI
-//INFO FOR FORM CREATE TODO OBJECT
-//CREATE LIST(PROJECT) CREATOR
-
 
 document.addEventListener('DOMContentLoaded', function () {
     class Todo {
-        constructor(title, description, dueDate, priority) {
-          this.title = title;
-          this.description = description;
-          this.dueDate = dueDate;
-          this.priority = priority;
+        constructor(title, description, dueDate, priority, completed = false) {
+            this.title = title;
+            this.description = description;
+            this.dueDate = dueDate;
+            this.priority = priority;
+            this.completed = completed;
         }
-      
-        // You can add methods here if needed
-      }
+    }
 
-      document.getElementById('closeFormBtn').addEventListener('click', function() {
+    function addTaskToList(task) {
+        const listItem = document.createElement('li');
+    
+        // Checkbox
+        const checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
+        checkBox.id = 'check' + document.getElementById('taskList').childElementCount;
+        checkBox.checked = task.completed;
+        checkBox.addEventListener('change', () => {
+            task.completed = checkBox.checked;
+            updateLocalStorage();
+        });
+    
+        // Label for the task
+        const label = document.createElement('label');
+        label.htmlFor = checkBox.id;
+        label.textContent = task.title;
+        label.setAttribute('data-content', task.title);
+    
+        // Info Checkbox (hidden)
+        const infoCheckbox = document.createElement('input');
+        infoCheckbox.type = 'checkbox';
+        infoCheckbox.id = 'infoCheck' + document.getElementById('taskList').childElementCount;
+        infoCheckbox.className = 'info-checkbox';
+        infoCheckbox.style.display = 'none';
+    
+        // Info Label (animated element)
+        const infoLabel = document.createElement('label');
+        infoLabel.htmlFor = infoCheckbox.id;
+        infoLabel.className = 'info-label';
+        for (let i = 0; i < 3; i++) {
+            const span = document.createElement('span');
+            infoLabel.appendChild(span);
+        }
+    
+        // Task info div
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'task-info';
+        infoDiv.innerHTML = `
+            <p class="task-description">Description: ${task.description}</p>
+            <p class="task-dueDate">Deadline: ${task.dueDate}</p>
+            <p class="task-priority">Priority: ${task.priority}</p>
+        `;
+        infoLabel.addEventListener('click', function () {
+            infoDiv.style.display = infoDiv.style.display === 'block' ? 'none' : 'block';
+        });
+    
+        // Delete Button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'red-btn';
+        deleteButton.onclick = function () {
+            listItem.remove();
+            updateLocalStorage();
+        };
+        infoDiv.appendChild(deleteButton);
+    
+        // Appending elements
+        listItem.appendChild(checkBox);
+        listItem.appendChild(label);
+        listItem.appendChild(infoCheckbox);
+        listItem.appendChild(infoLabel);
+        listItem.appendChild(infoDiv);
+    
+        document.getElementById('taskList').appendChild(listItem);
+    }
+    
+
+    document.getElementById('openFormBtn').addEventListener('click', function () {
+        document.getElementById('formPopup').style.display = 'block';
+    });
+
+    document.getElementById('closeFormBtn').addEventListener('click', function () {
         document.getElementById('formPopup').style.display = 'none';
     });
 
-    // Event listener for the Escape key
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             document.getElementById('formPopup').style.display = 'none';
         }
     });
 
-    document.getElementById('openFormBtn').addEventListener('click', function() {
-        document.getElementById('formPopup').style.display = 'block';
-      });
-      
-      document.getElementById('taskForm').addEventListener('submit', function(event) {
+    document.getElementById('taskForm').addEventListener('submit', function (event) {
         event.preventDefault();
-    
-        // Create a new Todo object
+
         const newTodo = new Todo(
             document.getElementById('title').value,
             document.getElementById('description').value,
             document.getElementById('dueDate').value,
-            document.getElementById('priority').value
+            document.getElementById('priority').value,
+            false // initial completed status is false
         );
-    
-        // Create a list item using the Todo object
-        const listItem = document.createElement('li');
-        const checkBox = document.createElement('input');
-        checkBox.type = 'checkbox';
-        checkBox.id = 'check' + document.getElementById('taskList').childElementCount;
-    
-        const label = document.createElement('label');
-        label.htmlFor = checkBox.id;
-        label.textContent = newTodo.title;
-    
-        const infoButton = document.createElement('button');
-        infoButton.textContent = 'Info';
-    
-        const infoDiv = document.createElement('div');
-        infoDiv.style.display = 'none';
-        infoDiv.innerHTML = `
-            <p>Description: ${newTodo.description}</p>
-            <p>Due Date: ${newTodo.dueDate}</p>
-            <p>Priority: ${newTodo.priority}</p>
-        `;
-    
-        infoButton.onclick = function() {
-            infoDiv.style.display = infoDiv.style.display === 'none' ? 'block' : 'none';
-        };
-    
-        listItem.appendChild(checkBox);
-        listItem.appendChild(label);
-        listItem.appendChild(infoButton);
-        listItem.appendChild(infoDiv);
-    
-        document.getElementById('taskList').appendChild(listItem);
-    
+
+        addTaskToList(newTodo);
         this.reset();
         document.getElementById('formPopup').style.display = 'none';
+
+        updateLocalStorage();
     });
-    
-      
-      
+
+    function updateLocalStorage() {
+        const tasks = [];
+        document.querySelectorAll('#taskList li').forEach(li => {
+            const title = li.querySelector('label').textContent;
+            const description = li.querySelector('.task-description').innerHTML;
+            const dueDate = li.querySelector('.task-dueDate').textContent;
+            const priority = li.querySelector('.task-priority').textContent;
+            const completed = li.querySelector('input[type="checkbox"]').checked;
+            tasks.push(new Todo(title, description, dueDate, priority, completed));
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+        const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+        if (savedTasks) {
+            savedTasks.forEach(task => {
+                addTaskToList(task);
+            });
+        }
+    }
+
+    loadTasks();
 });
-
-
