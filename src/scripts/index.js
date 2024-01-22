@@ -54,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const infoDiv = document.createElement('div');
         infoDiv.className = 'task-info';
         infoDiv.innerHTML = `
-            <p class="task-description">Description: ${task.description}</p>
-            <p class="task-dueDate">Deadline: ${task.dueDate}</p>
-            <p class="task-priority">Priority: ${task.priority}</p>
+            <p class="task-description">${task.description}</p>
+            <p class="task-dueDate"> ${task.dueDate}</p>
+            <p class="task-priority">${task.priority}</p>
         `;
         infoLabel.addEventListener('click', function () {
             infoDiv.style.display = infoDiv.style.display === 'block' ? 'none' : 'block';
@@ -119,14 +119,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const tasks = [];
         document.querySelectorAll('#taskList li').forEach(li => {
             const title = li.querySelector('label').textContent;
-            const description = li.querySelector('.task-description').innerHTML;
-            const dueDate = li.querySelector('.task-dueDate').textContent;
-            const priority = li.querySelector('.task-priority').textContent;
+            const description = li.querySelector('.task-description').textContent.replace('Description: ', '');
+            const dueDate = li.querySelector('.task-dueDate').textContent.replace('Deadline: ', '');
+            const priority = li.querySelector('.task-priority').textContent.replace('Priority: ', '');
             const completed = li.querySelector('input[type="checkbox"]').checked;
             tasks.push(new Todo(title, description, dueDate, priority, completed));
         });
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+    
 
     function loadTasks() {
         const savedTasks = JSON.parse(localStorage.getItem('tasks'));
